@@ -9,9 +9,9 @@ namespace UnrealBuildTool.Rules
 	{
 		public ApiPlugin(TargetInfo target)
 		{
-			PublicIncludePaths.AddRange(new string[] {"ApiPlugin/Public" });
+			PublicIncludePaths.AddRange(new string[] {"ApiPlugin/Public", "ApiPlugin/Api" });
 			PrivateIncludePaths.AddRange(new string[] {"ApiPlugin/Private" });
-			PublicDependencyModuleNames.AddRange(new string[] {"Core", "Engine"});
+			PublicDependencyModuleNames.AddRange(new string[] {"Core", "CoreUObject", "Engine"});
 			PrivateDependencyModuleNames.AddRange(new string[] {});
 			DynamicallyLoadedModuleNames.AddRange(new string[] {});
 		}

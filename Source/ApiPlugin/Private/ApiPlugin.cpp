@@ -1,4 +1,4 @@
-#include "IApiPlugin.h"
+#include "ApiPluginPrivatePCH.h"
 
 /// Concrete API implementation
 class FApiPlugin : public IApiPlugin {
