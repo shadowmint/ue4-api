@@ -1,6 +1,3 @@
 [submodule "rust-extern"]
 	path = rust-extern
 	url = git@github.com:shadowmint/rust-extern.git
-[submodule "3rdparty/rust-extern"]
-	path = 3rdparty/rust-extern
-	url = git@github.com:shadowmint/rust-extern.git
