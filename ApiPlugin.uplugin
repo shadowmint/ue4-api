@@ -1,0 +1,19 @@
+{
+	"FileVersion" : 1,
+	"FriendlyName" : "UE4 API",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "",
+	"CreatedByURL" : "https://github.com/shadowmint/ue4-api",
+	"EngineVersion" : "4.7.3",
+	"Description" : "C++ API for UE4",
+	"Category" : "C++",
+	"EnabledByDefault" : true,
+	"Modules" :
+	[
+		{
+			"Name" : "ApiPlugin",
+			"Type" : "Runtime"
+		}
+	]
+}
