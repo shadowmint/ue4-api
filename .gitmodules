@@ -1,3 +1,6 @@
 [submodule "rust-extern"]
 	path = rust-extern
 	url = git@github.com:shadowmint/rust-extern.git
+[submodule "lib/npp"]
+	path = lib/npp
+	url = doug@shadowmint.xen.prgmr.com:repo/c/libnpp.git
