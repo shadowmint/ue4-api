@@ -19,7 +19,9 @@ namespace api {
 
       /// Convert an FString into a const char *
       /// Usage: Debug::as_str(*actor->GetName());
-      static const char *as_str(FString value);
+      inline static char *as_str(FString value) {
+        return TCHAR_TO_ANSI(*value);
+      }
 
       /// Trace a debug message
       /// Usage: Debug::trace(this, FString::Printf(TEXT("%s"), TEXT("Hello World")));
@@ -27,7 +29,7 @@ namespace api {
 
       /// Trace a debug message dynamically
       /// Usage: Debug::trace(this, "%s", "Hello World");
-      /// Usage: Debug::trace(context, "Found an actor: %s", Debug::as_str(*ActorItr->GetName()));
+      /// Usage: Debug::trace(context, "Found an actor: %s", Debug::as_str(ActorItr->GetName()));
       template<typename ... Args> static void trace(UObject *context, const string& format, Args ... args) {
         size_t size = 1 + snprintf(nullptr, 0, format.c_str(), args ...);
         unique_ptr<char[]> buf(new char[size]);
