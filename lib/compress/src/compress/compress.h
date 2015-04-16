@@ -1,6 +1,103 @@
 #pragma once
 
 #include "miniz.cpp"
+#include <npp/types.h>
+#include <npp/option.h>
+
+namespace compress {
+
+  /// Arbitrary data block
+  class Block {
+    public:
+
+      /// Inner data
+      u8* data;
+      u64 length;
+
+      /// Create a new instance from raw
+      Block(u8 *data, u64 length) {
+        this->length = length;
+        this->data = (u8 *) malloc(length);
+        if (data != NULL)
+          memcpy(this->data, data, length);
+      }
+
+      /// Create new instance from a string
+      Block(string value) {
+        auto temp = value.c_str();
+        this->length = value.length();
+        this->data = (u8 *) malloc(length);
+        memcpy(this->data, temp, length);
+      }
+
+      /// Convert a Block into a string, as much as possible
+      npp::Option<string> AsStr() {
+        if (length == 0)
+          return npp::Some<string>("");
+        else if ((length > 0) && (data != NULL)) {
+          auto rtn = string();
+          rtn.assign((const char *) data, (size_t) length);
+          return npp::Some<string>(rtn);
+        }
+        return npp::None<string>();
+      }
+
+      /// Compress a data block and return a data block
+      npp::Option<Block*> Deflate() {
+        Block *rtn = new Block(NULL, compressBound(length));
+        if (compress_(rtn->data, &rtn->length, data, length) != Z_OK) {
+          delete rtn;
+          return npp::None<Block*>();
+        }
+        return npp::Some<Block*>(rtn);
+      }
+
+      /// Decompress a data block and return a new data block of size buffer
+      /// If buffer < the length of the compressed data, it will return None.
+      npp::Option<Block*> Inflate(u64 buffer) {
+        Block *rtn = new Block(NULL, buffer);
+        if (uncompress(rtn->data, &rtn->length, data, length) != Z_OK) {
+          delete rtn;
+          return npp::None<Block*>();
+        }
+        return npp::Some<Block*>(rtn);
+      }
+
+      /// Decompress a data block and return a new data block of the best size
+      /// This is a binary search for a valid size, and can be very slow!
+      /// The maximum size is 10 MB; use Inflate(size) for larger files.
+      npp::Option<Block*> Inflate() {
+        u64 max_buffer = 1024 * 1024 * 10;
+        u64 upper = 1;
+        u64 size = 256;
+        u64 step = 8;
+        Block *rtn = new Block(NULL, size);
+
+        // First find an upper bound that is valid
+        while(1) {
+          if (!(uncompress(rtn->data, &rtn->length, data, upper) == Z_OK)) {
+            upper = upper * 2;
+            if (upper > size) {
+              delete rtn;
+              size = size * step;
+              if (size > max_buffer)
+                rtn = NULL;
+              else
+                rtn = new Block(NULL, size);
+            }
+          }
+          else {
+            size = rtn->length;
+            break;
+          }
+        }
+
+        // Now return the data in a buffer that big.
+        delete rtn;
+        return Inflate(size);
+      }
+  };
+}
 
 /*
 Memory to Memory Compression
@@ -17,12 +114,10 @@ Memory to Memory Decompression
   int uncompress(Byte *pDest, uLong *pDest_len, const Byte *pSource, uLong source_len);
 */
 
-namespace compress {
+/*namespace compress {
 
-  /*
   // example1.c - Demonstrates miniz.c's compress() and uncompress() functions (same as zlib's).
   // Public domain, May 15 2011, Rich Geldreich, richgel99@gmail.com. See "unlicense" statement at the end of tinfl.c.
-  #include "miniz.c"
 
   typedef unsigned char uint8;
   typedef unsigned short uint16;
@@ -37,7 +132,7 @@ namespace compress {
     "Good morning Dr. Chandra. This is Hal. I am ready for my first lesson." \
     "Good morning Dr. Chandra. This is Hal. I am ready for my first lesson.";
 
-  int main(int argc, char *argv[])
+  int run(int argc, char *argv[])
   {
     uint step = 0;
     int cmp_status;
@@ -62,7 +157,7 @@ namespace compress {
       }
 
       // Compress the string.
-      cmp_status = compress(pCmp, &cmp_len, (const unsigned char *)s_pStr, src_len);
+      cmp_status = compress_(pCmp, &cmp_len, (const unsigned char *)s_pStr, src_len);
       if (cmp_status != Z_OK)
       {
         printf("compress() failed!\n");
@@ -125,5 +220,5 @@ namespace compress {
     printf("Success.\n");
     return EXIT_SUCCESS;
   }
-  */
 }
+*/

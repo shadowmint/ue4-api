@@ -39,6 +39,12 @@ namespace api {
         return npp::Format("<FVector: %f %f %f>", value.X, value.Y, value.Z);
       }
 
+      /// Convert a FVector2D into a const char *
+      /// Nb. Don't call this directly. Use AS_CSTR(value)
+      static string AsStr(FVector2D value) {
+        return npp::Format("<FVector2D: %f %f>", value.X, value.Y);
+      }
+
       /// Trace a debug message
       static void Trace(UObject *context, FString value);
 

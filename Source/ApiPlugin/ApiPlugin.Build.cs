@@ -11,7 +11,7 @@ namespace UnrealBuildTool.Rules
 		{
 			PublicIncludePaths.AddRange(new string[] {"ApiPlugin/Public", "ApiPlugin/Api" });
 			PrivateIncludePaths.AddRange(new string[] {"ApiPlugin/Private" });
-			PublicDependencyModuleNames.AddRange(new string[] {"Core", "CoreUObject", "Engine"});
+			PublicDependencyModuleNames.AddRange(new string[] {"Core", "CoreUObject", "Engine", "InputCore"});
 			PrivateDependencyModuleNames.AddRange(new string[] {});
 			DynamicallyLoadedModuleNames.AddRange(new string[] {});
 		}

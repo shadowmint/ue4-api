@@ -113,5 +113,16 @@ namespace api {
         auto vy = y * vec.Y / y.Size();
         return vx + vy;
       }
+
+      /// Project the given 2D vector into a 3D vector from the actor position
+      /// As per VectorFrom, but the result is a unit vector instead.
+      static FVector UnitVectorFrom(AActor *actor, FVector2D vec, FVector x, FVector y) {
+        auto rtn = VectorFrom(actor, vec, x, y);
+        auto size = rtn.Size();
+        if (size > 0) {
+          return rtn / size;
+        }
+        return rtn;
+      }
   };
 }

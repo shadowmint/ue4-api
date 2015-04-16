@@ -7,10 +7,16 @@ namespace api {
   namespace tests {
     namespace world {
 
-      /// Project a vector relative to the actor in the XY plane
+      /// Project a vector relative to the actor in the XZ plane
       void test_project_from_actor_in_plane(AActor *actor) {
+        auto vec = Actor::UnitVectorFrom(actor, FVector2D(1.7, 2.3), FVector(1.0, 0.0, 0.0), FVector(0.0, 0.0, 1.0));
+      }
+
+      /// Project a vector relative to the actor in the XY plane
+      void test_project_unit_from_actor_in_plane(AActor *actor) {
         auto vec = Actor::VectorFrom(actor, FVector2D(1.7, 2.3), FVector(1.0, 0.0, 0.0), FVector(0.0, 1.0, 0.0));
       }
+
       /// Find first actor that owns a ULightComponent
       void test_find_actor_component_by_type(AActor *context) {
         UTestApiCmp *result = api::Actor::Component<UTestApiCmp>(context).Or(NULL);
@@ -52,6 +58,7 @@ namespace api {
       void test_create_actor_from_blueprint(UObject *context, UBlueprintGeneratedClass *factory) {
         // UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Things")
         // UBlueprintGeneratedClass *factory; // <-- Get BP reference here in editor
+        // TSubclassOf<AActor> *bullet; // <-- Or this, for specifically an actor
         AActor *actor = api::Actor::Create(context, factory).Or(NULL);
       }
 

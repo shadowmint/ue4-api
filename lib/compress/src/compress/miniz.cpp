@@ -439,7 +439,7 @@ const char *mz_error(int err);
   #define deflate               mz_deflate
   #define deflateEnd            mz_deflateEnd
   #define deflateBound          mz_deflateBound
-  #define compress_              mz_compress
+  #define compress_             mz_compress
   #define compress2             mz_compress2
   #define compressBound         mz_compressBound
   #define inflateInit           mz_inflateInit

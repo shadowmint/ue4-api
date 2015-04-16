@@ -1,6 +1,7 @@
 #pragma once
 
 #include "API.h"
+#include "Events.h"
 #include "Components/PrimitiveComponent.h"
 
 using namespace api;
@@ -29,6 +30,15 @@ namespace api {
       static void SetVelocity(AActor *context, FVector velocity) {
         Physics::Primitive(context).Then([&] (UPrimitiveComponent *mesh) {
           mesh->SetPhysicsLinearVelocity(velocity);
+        });
+      }
+
+      /// Add a callback for an overlap start event
+      static void BindOnOverlap(AActor *context, Event<AActor*, OnOverlapHandler> *handler) {
+        Physics::Primitive(context).Then([&] (UPrimitiveComponent *c) {
+          handler->context = context;
+          auto ref = &Event<AActor*, OnOverlapHandler>::OnOverlapCallback;
+          c->OnComponentBeginOverlap.AddDynamic(handler, ref);
         });
       }
   };
